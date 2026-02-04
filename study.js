@@ -30,12 +30,10 @@ export async function processStudyContent(text) {
 }
 
 /**
- * Fetches AI Explanation from GPT-5 Nano (Simulated via standard API for this demo)
+ * Fetches AI Explanation from GPT-5 Nano (Simulated via standard API structure)
  */
 async function getAIExplanation(text) {
-  // In a real serverless environment, you'd call your GPT endpoint here.
-  // For Michael's app, we'll structure the prompt for the "Smart Tutor" vibe.
-  
+  // Structure the prompt for the "Smart Tutor" vibe (Friendly & Clear)
   const prompt = `
     Act as a professional, friendly female tutor for kids and teenagers.
     Analyze the following text and provide:
@@ -46,11 +44,11 @@ async function getAIExplanation(text) {
     Text: "${text}"
   `;
 
-  // Simulate API Call Logic
+  // Simulate API Call Logic for the frontend
   return {
-    text: "Here is a simple breakdown of what you provided: [AI Step-by-Step Explanation would go here]",
-    summary: ["Key Point 1", "Key Point 2", "Key Point 3"],
-    topics: ["Topic A", "Topic B", "Topic C"]
+    text: "Here is a simple, step-by-step breakdown of what you're studying! I've made it easy to understand so you can master this topic in no time. [Detailed AI Explanation would appear here based on your text]",
+    summary: ["Key Point 1: The main idea.", "Key Point 2: Important detail.", "Key Point 3: Final takeaway."],
+    topics: ["Main Topic", "Supporting Detail", "Concept Connection"]
   };
 }
 
@@ -58,17 +56,14 @@ async function getAIExplanation(text) {
  * Generates 20 Quiz Questions from the text
  */
 async function getAIQuiz(text) {
-  // Logic to generate 20 questions based on the text
-  // Each question has: question, options [A, B, C, D], correctIndex
-  
   const questions = [];
   for (let i = 1; i <= 20; i++) {
     questions.push({
       id: i,
-      question: `Smart Question #${i} based on your study text?`,
-      options: ["Option A", "Option B", "Option C", "Option D"],
-      correct: Math.floor(Math.random() * 4), // Random for demo
-      explanation: "This is why the answer is correct!"
+      question: `Smart Question #${i} about this topic?`,
+      options: ["Correct Answer Option", "Wrong Option B", "Wrong Option C", "Wrong Option D"],
+      correct: 0, // In real AI, this would vary
+      explanation: "This answer is correct because it directly relates to the main concept we just studied!"
     });
   }
   return questions;
@@ -81,15 +76,13 @@ async function getAIQuiz(text) {
 export function speakText(text, onEnd = null) {
   if (!window.speechSynthesis) return;
 
-  // Cancel any ongoing speech
   window.speechSynthesis.cancel();
-
   const utterance = new SpeechSynthesisUtterance(text);
   
-  // Try to find a high-quality female voice
   const voices = window.speechSynthesis.getVoices();
+  // Look for a friendly female voice
   const femaleVoice = voices.find(v => 
-    v.name.includes('Female') || v.name.includes('Google UK English Female') || v.name.includes('Samantha')
+    v.name.includes('Female') || v.name.includes('Google UK English Female') || v.name.includes('Samantha') || v.name.includes('Microsoft Zira')
   );
 
   if (femaleVoice) utterance.voice = femaleVoice;
@@ -97,19 +90,16 @@ export function speakText(text, onEnd = null) {
   utterance.rate = 0.95;
 
   if (onEnd) utterance.onend = onEnd;
-
   window.speechSynthesis.speak(utterance);
 }
 
 /**
  * Simple Offline OCR Simulation
- * In a real app, you'd use Tesseract.js here
  */
 export async function performOCR(imageFile) {
   return new Promise((resolve) => {
     // Simulate processing time
     setTimeout(() => {
-      resolve("This is the text extracted from your image. You can now click 'Teach Me' to learn more!");
+      resolve("This is the text extracted from your image. You can now click 'Teach Me' to learn more about this subject!");
     }, 1500);
   });
-}
