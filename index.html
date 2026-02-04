@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lenovox AI - Smart Study</title>
+<title>Lenovox AI - Smart Study (Light Edition)</title>
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,11 +12,13 @@
 
 <style>
   :root {
-    --bg-dark: #03030b;
-    --accent-blue: #00d2ff;
-    --accent-purple: #9d50bb;
-    --card-bg: rgba(255, 255, 255, 0.05);
-    --glass: rgba(255, 255, 255, 0.03);
+    --bg-light: #f0f4f8;
+    --accent-blue: #00a8ff;
+    --accent-purple: #9c88ff;
+    --text-main: #2f3640;
+    --card-bg: #ffffff;
+    --glass: rgba(255, 255, 255, 0.8);
+    --shadow-3d: 0 10px 20px rgba(0,0,0,0.05), 0 6px 6px rgba(0,0,0,0.05);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,175 +27,211 @@
     width: 100%;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
-    background-color: var(--bg-dark);
-    color: white;
+    background-color: var(--bg-light);
+    color: var(--text-main);
     overflow-x: hidden;
   }
 
-  /* UNIVERSE BACKGROUND */
-  .universe {
+  /* VIBRANT LIGHT BACKGROUND */
+  .vibrant-bg {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
     z-index: -1;
-    background: radial-gradient(circle at 50% 50%, #0a0a1a 0%, #03030b 100%);
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+    overflow: hidden;
+  }
+
+  .blob {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(156, 136, 255, 0.2) 0%, transparent 70%);
+    filter: blur(50px);
+    z-index: -1;
+    animation: move 20s infinite alternate;
+  }
+
+  @keyframes move {
+    from { transform: translate(-10%, -10%); }
+    to { transform: translate(20%, 20%); }
   }
 
   /* HEADER */
   header {
-    padding: 25px;
+    padding: 20px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0,0,0,0.3);
+    background: var(--glass);
     backdrop-filter: blur(10px);
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-3d);
   }
 
-  .greeting h1 { font-size: 20px; font-weight: 900; }
-  .greeting p { font-size: 13px; color: #aaa; }
+  .greeting h1 { font-size: 22px; font-weight: 900; color: #1e272e; }
+  .greeting p { font-size: 14px; color: #718093; }
 
   /* MAIN CONTAINER */
   .container {
-    padding: 20px;
-    max-width: 600px;
+    padding: 25px;
+    max-width: 650px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
   }
 
   /* INPUT SECTION */
   .input-card {
     background: var(--card-bg);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 25px;
-    padding: 20px;
-    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    padding: 25px;
+    box-shadow: var(--shadow-3d);
+    border: 1px solid rgba(255,255,255,0.5);
+    transition: transform 0.3s;
   }
+
+  .input-card:hover { transform: translateY(-5px); }
 
   textarea {
     width: 100%;
-    height: 120px;
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 15px;
-    padding: 15px;
-    color: white;
+    height: 140px;
+    background: #f8f9fa;
+    border: 2px solid #edf2f7;
+    border-radius: 20px;
+    padding: 20px;
+    color: var(--text-main);
     font-family: inherit;
-    font-size: 15px;
+    font-size: 16px;
     resize: none;
     outline: none;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    transition: 0.3s;
   }
 
-  textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
+  textarea:focus { border-color: var(--accent-blue); background: #fff; box-shadow: 0 0 15px rgba(0, 168, 255, 0.1); }
 
   .input-actions {
     display: flex;
-    gap: 10px;
+    gap: 15px;
   }
 
   .btn {
     flex: 1;
-    padding: 15px;
-    border-radius: 15px;
+    padding: 16px;
+    border-radius: 18px;
     border: none;
     font-weight: 800;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    transition: 0.3s;
+    gap: 12px;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 15px;
   }
 
-  .btn-ocr { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-  .btn-teach { background: linear-gradient(90deg, #00d2ff, #3a7bd5); color: white; box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3); }
+  .btn-ocr { background: #f1f2f6; color: #2f3542; border: 1px solid #dfe4ea; }
+  .btn-teach { background: linear-gradient(135deg, #00a8ff, #0097e6); color: white; box-shadow: 0 8px 15px rgba(0, 168, 255, 0.2); }
   
+  .btn:hover { transform: translateY(-3px) scale(1.02); }
   .btn:active { transform: scale(0.95); }
 
   /* AI RESPONSE SECTION */
   #aiOutput {
     display: none;
-    background: var(--glass);
-    border: 1px solid rgba(0, 210, 255, 0.2);
-    border-radius: 25px;
-    padding: 25px;
+    background: #ffffff;
+    border: 1px solid #e1e8ed;
+    border-radius: 30px;
+    padding: 30px;
+    box-shadow: var(--shadow-3d);
     animation: fadeInUp 0.5s ease-out;
   }
 
-  .ai-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; color: var(--accent-blue); }
-  .ai-text { font-size: 15px; line-height: 1.6; color: #ddd; margin-bottom: 20px; }
+  .ai-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; color: var(--accent-blue); font-size: 18px; }
+  .ai-text { font-size: 16px; line-height: 1.7; color: #4b6584; margin-bottom: 25px; }
 
   /* QUIZ SECTION */
   #quizBox {
     display: none;
-    background: #fff;
-    color: #000;
-    border-radius: 30px;
-    padding: 30px;
+    background: #ffffff;
+    color: #2f3640;
+    border-radius: 35px;
+    padding: 35px;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
     animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .timer-bar {
     position: absolute;
-    top: 0; left: 0; height: 6px;
-    background: var(--accent-blue);
+    top: 0; left: 0; height: 8px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
     width: 100%;
     transition: width 1s linear;
   }
 
-  .quiz-q { font-size: 20px; font-weight: 900; margin-bottom: 25px; }
-  .options-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  .quiz-q { font-size: 22px; font-weight: 900; margin-bottom: 30px; line-height: 1.4; }
+  .options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
 
   .opt-btn {
-    padding: 18px;
-    background: #f0f0f5;
-    border: 2px solid transparent;
-    border-radius: 18px;
+    padding: 20px;
+    background: #f8f9fa;
+    border: 2px solid #f1f2f6;
+    border-radius: 20px;
     text-align: left;
     font-weight: 700;
+    font-size: 16px;
     cursor: pointer;
     transition: 0.2s;
+    color: #2f3640;
   }
 
-  .opt-btn:hover { background: #e0e0ef; }
-  .opt-btn.correct { background: #2ed573; color: white; border-color: #2ed573; }
-  .opt-btn.wrong { background: #ff4757; color: white; border-color: #ff4757; }
+  .opt-btn:hover { background: #f1f2f6; transform: translateX(5px); border-color: var(--accent-blue); }
+  .opt-btn.correct { background: #2ed573; color: white; border-color: #2ed573; box-shadow: 0 5px 15px rgba(46, 213, 115, 0.3); }
+  .opt-btn.wrong { background: #ff4757; color: white; border-color: #ff4757; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3); }
 
   /* ANIMATIONS */
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-  /* LOADING SPINNER */
+  /* LOADER */
+  .loader-container { display: none; text-align: center; margin: 20px 0; }
   .loader {
-    display: none;
-    width: 40px; height: 40px;
-    border: 4px solid rgba(255,255,255,0.1);
-    border-top: 4px solid var(--accent-blue);
+    width: 45px; height: 45px;
+    border: 5px solid #f1f2f6;
+    border-top: 5px solid var(--accent-blue);
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    margin: 20px auto;
+    display: inline-block;
   }
   @keyframes spin { 100% { transform: rotate(360deg); } }
+
+  /* BUTTON PULSE */
+  .pulse { animation: pulse-animation 2s infinite; }
+  @keyframes pulse-animation {
+    0% { box-shadow: 0 0 0 0px rgba(0, 168, 255, 0.4); }
+    100% { box-shadow: 0 0 0 20px rgba(0, 168, 255, 0); }
+  }
 
 </style>
 </head>
 <body>
 
-  <div class="universe"></div>
+  <div class="vibrant-bg">
+    <div class="blob" style="top: 10%; left: 10%;"></div>
+    <div class="blob" style="bottom: 10%; right: 10%; background: radial-gradient(circle, rgba(0, 168, 255, 0.1) 0%, transparent 70%);"></div>
+  </div>
 
   <header>
     <div class="greeting">
-      <p>Welcome back,</p>
-      <h1 id="userName">Student</h1>
+      <p>Ready to learn?</p>
+      <h1 id="userName">Student Hero</h1>
     </div>
-    <div style="font-size: 24px; color: var(--accent-blue);"><i class="fas fa-user-astronaut"></i></div>
+    <div style="font-size: 28px; color: var(--accent-blue);"><i class="fas fa-rocket"></i></div>
   </header>
 
   <div class="container">
@@ -205,35 +243,38 @@
         <button class="btn btn-ocr" onclick="document.getElementById('imageInput').click()">
           <i class="fas fa-camera"></i> Scan Image
         </button>
-        <button class="btn btn-teach" id="teachBtn">
-          <i class="fas fa-brain"></i> Teach Me
+        <button class="btn btn-teach pulse" id="teachBtn">
+          <i class="fas fa-magic"></i> Teach Me
         </button>
       </div>
       <input type="file" id="imageInput" hidden accept="image/*">
     </div>
 
-    <div class="loader" id="loader"></div>
+    <div class="loader-container" id="loader">
+      <div class="loader"></div>
+      <p style="margin-top: 10px; font-weight: 700; color: var(--accent-blue);">AI Buddy is thinking...</p>
+    </div>
 
     <!-- AI EXPLANATION -->
     <div id="aiOutput">
       <div class="ai-header">
-        <i class="fas fa-robot"></i>
-        <strong>AI Buddy is Teaching...</strong>
+        <i class="fas fa-smile-beam"></i>
+        <strong>Your Personal Tutor Says:</strong>
       </div>
       <div class="ai-text" id="aiText"></div>
       <button class="btn btn-teach" onclick="startQuiz()">
-        <i class="fas fa-gamepad"></i> Start Quiz Level
+        <i class="fas fa-star"></i> Start Quiz Adventure
       </button>
     </div>
 
     <!-- QUIZ BOX -->
     <div id="quizBox">
       <div class="timer-bar" id="timerBar"></div>
-      <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 10px; font-weight: 800; color: #888;">
+      <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 15px; font-weight: 800; color: #a1a1a1;">
         <span id="qCount">Question 1/20</span>
         <span id="timeLeft">25s</span>
       </div>
-      <div class="quiz-q" id="questionText">Loading question...</div>
+      <div class="quiz-q" id="questionText">Loading your challenge...</div>
       <div class="options-grid" id="optionsGrid"></div>
     </div>
 
@@ -258,10 +299,12 @@
 
     // LOAD SESSION
     async function init() {
-      const session = await getSession();
-      if (session && session.name) {
-        userNameEl.textContent = session.name;
-      }
+      try {
+        const session = await getSession();
+        if (session && session.name) {
+          userNameEl.textContent = session.name;
+        }
+      } catch (e) { console.log("Session not found, using default."); }
     }
     init();
 
@@ -278,7 +321,7 @@
     // TEACH ME LOGIC
     teachBtn.onclick = async () => {
       const text = studyInput.value.trim();
-      if (!text) return alert("Please enter some text first!");
+      if (!text) return alert("Hey! Please enter some text first! 😊");
 
       loader.style.display = 'block';
       aiOutput.style.display = 'none';
@@ -293,7 +336,7 @@
         currentQuiz = result.quiz;
         speakText(result.explanation);
       } else {
-        alert("AI Error: " + result.error);
+        alert("Oops! Something went wrong with the AI: " + result.error);
       }
     };
 
@@ -307,7 +350,7 @@
 
     function showQuestion() {
       if (currentQIndex >= currentQuiz.length) {
-        alert("Quiz Complete! Great job legend! 🏆");
+        alert("Incredible! You finished the quiz! You're a star! 🌟🏆");
         quizBox.style.display = 'none';
         return;
       }
@@ -341,7 +384,7 @@
       if (idx === q.correct) {
         btn.classList.add('correct');
       } else {
-        btn.classList.add('wrong');
+        if(btn) btn.classList.add('wrong');
         allBtns[q.correct].classList.add('correct');
       }
 
@@ -373,5 +416,5 @@
     }
 
   </script>
-  </body>
-</html>
+</body>
+<html/>
