@@ -1,179 +1,278 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>LetStudy AI</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      padding: 20px;
-    }
-    h1, h2 {
-      color: #38bdf8;
-    }
-    textarea, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
-    textarea {
-      min-height: 120px;
-    }
-    button {
-      background: #38bdf8;
-      color: #020617;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button.secondary {
-      background: #22c55e;
-      margin-top: 5px;
-    }
-    section {
-      margin-top: 30px;
-      background: #020617;
-      padding: 20px;
-      border-radius: 12px;
-    }
-    .question {
-      margin-top: 15px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lenovox AI - Smart Study</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg-light: #f4f7fa;
+    --accent-blue: #00a8ff;
+    --accent-purple: #9c88ff;
+    --text-main: #2f3640;
+    --card-bg: #ffffff;
+    --glass: rgba(255, 255, 255, 0.85);
+    --shadow-3d: 0 15px 35px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.05);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body, html {
+    width: 100%;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    overflow-x: hidden;
+  }
+
+  /* VIBRANT LIGHT BACKGROUND */
+  .vibrant-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+    background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+  }
+
+  /* HEADER */
+  header {
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: var(--shadow-3d);
+  }
+
+  .greeting h1 { font-size: 22px; font-weight: 900; color: #1e272e; }
+  .greeting p { font-size: 14px; color: #718093; }
+
+  /* CONTAINER */
+  .container {
+    padding: 25px;
+    max-width: 650px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border-radius: 30px;
+    padding: 25px;
+    box-shadow: var(--shadow-3d);
+    border: 1px solid rgba(255,255,255,0.6);
+    transition: 0.3s;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    background: #f8f9fa;
+    border: 2px solid #edf2f7;
+    border-radius: 20px;
+    padding: 20px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 16px;
+    resize: none;
+    outline: none;
+    margin-bottom: 20px;
+  }
+
+  .btn {
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 15px;
+    width: 100%;
+  }
+
+  .btn-primary { background: linear-gradient(135deg, #00a8ff, #0097e6); color: white; box-shadow: 0 8px 15px rgba(0, 168, 255, 0.2); }
+  .btn:hover { transform: translateY(-3px) scale(1.02); }
+
+  /* AI SECTION */
+  #aiSection, #quizSection, #videoSection { display: none; animation: fadeInUp 0.6s ease-out; }
+
+  .content-block { margin-bottom: 20px; }
+  .content-block h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; color: #1e272e; }
+  .content-block p { font-size: 16px; line-height: 1.7; color: #4b6584; }
+
+  /* VIDEO CARDS */
+  .video-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 15px; }
+  .video-card {
+    display: flex;
+    gap: 15px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: 0.2s;
+    border: 1px solid #edf2f7;
+  }
+  .video-card:hover { background: #fff; transform: translateX(5px); border-color: var(--accent-blue); }
+  .video-card img { width: 100px; border-radius: 12px; }
+  .video-card h4 { font-size: 14px; font-weight: 700; }
+
+  /* LOADER */
+  .loader-container { display: none; text-align: center; padding: 20px; }
+  .loader { width: 40px; height: 40px; border: 4px solid #f1f2f6; border-top: 4px solid var(--accent-blue); border-radius: 50%; animation: spin 1s linear infinite; display: inline-block; }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+</style>
 </head>
 <body>
 
-<h1>📘 LetStudy AI</h1>
+  <div class="vibrant-bg"></div>
 
-<!-- INPUT SECTION -->
-<section>
-  <h2>What do you want to study?</h2>
-  <textarea id="topicInput" placeholder="Example: Photosynthesis"></textarea>
-  <button onclick="teachMe()">Teach Me</button>
-</section>
-
-<!-- AI EXPLANATION SECTION -->
-<section id="explanationSection" hidden>
-  <h2>🧠 AI Explanation</h2>
-  <div id="explanationContent"></div>
-  <button class="secondary" onclick="toggleSpeech()">🔊 Read Aloud</button>
-</section>
-
-<!-- QUIZ SECTION -->
-<section id="quizSection" hidden>
-  <h2>📝 Quiz</h2>
-  <div id="quizContent"></div>
-  <button onclick="submitQuiz()">Submit Quiz</button>
-</section>
-
-<!-- RESULT SECTION -->
-<section id="resultSection" hidden>
-  <h2>✅ Result</h2>
-  <p id="resultText"></p>
-</section>
-
-<!-- YOUTUBE SECTION -->
-<section id="youtubeSection" hidden>
-  <h2>🎥 Recommended Videos</h2>
-  <div id="youtubeVideos"></div>
-</section>
-
-<script>
-let speech;
-let quizAnswers = [];
-
-async function teachMe() {
-  const topic = document.getElementById("topicInput").value.trim();
-  if (!topic) return alert("Enter a topic");
-
-  const res = await fetch("/api/study", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ topic })
-  });
-
-  const data = await res.json();
-
-  document.getElementById("explanationContent").innerHTML = `
-    <h3>Definition</h3>
-    <p>${data.definition}</p>
-
-    <h3>Key Points</h3>
-    <ul>${data.keyPoints.map(k => `<li>${k}</li>`).join("")}</ul>
-
-    <h3>Examples</h3>
-    <ul>${data.examples.map(e => `<li>${e}</li>`).join("")}</ul>
-  `;
-
-  speech = new SpeechSynthesisUtterance(
-    data.definition + " " + data.keyPoints.join(". ") + " " + data.examples.join(". ")
-  );
-
-  document.getElementById("explanationSection").hidden = false;
-
-  renderQuiz(data.quiz);
-  loadYouTube(topic);
-}
-
-function toggleSpeech() {
-  if (speechSynthesis.speaking) {
-    speechSynthesis.cancel();
-  } else {
-    speechSynthesis.speak(speech);
-  }
-}
-
-function renderQuiz(quiz) {
-  quizAnswers = quiz.map(q => q.answer);
-
-  document.getElementById("quizContent").innerHTML = quiz.map((q, i) => `
-    <div class="question">
-      <p>${i + 1}. ${q.question}</p>
-      ${q.options.map(opt =>
-        `<label>
-          <input type="radio" name="q${i}" value="${opt}">
-          ${opt}
-        </label><br>`
-      ).join("")}
+  <header>
+    <div class="greeting">
+      <p>Let's Study,</p>
+      <h1 id="userName">Student</h1>
     </div>
-  `).join("");
+    <div style="font-size: 28px; color: var(--accent-blue);"><i class="fas fa-rocket"></i></div>
+  </header>
 
-  document.getElementById("quizSection").hidden = false;
-}
+  <div class="container">
+    
+    <!-- INPUT -->
+    <div class="card">
+      <textarea id="studyInput" placeholder="Paste your study text here..."></textarea>
+      <button class="btn btn-primary" id="teachBtn"><i class="fas fa-magic"></i> Teach Me</button>
+    </div>
 
-function submitQuiz() {
-  let score = 0;
+    <div class="loader-container" id="loader"><div class="loader"></div><p style="margin-top: 10px; font-weight: 700;">AI Buddy is thinking...</p></div>
 
-  quizAnswers.forEach((ans, i) => {
-    const chosen = document.querySelector(`input[name="q${i}"]:checked`);
-    if (chosen && chosen.value === ans) score++;
-  });
+    <!-- AI OUTPUT -->
+    <div id="aiSection" class="card">
+      <div class="content-block"><h3>Explanation</h3><p id="aiExplanation"></p></div>
+      <button class="btn btn-primary" id="startQuizBtn"><i class="fas fa-star"></i> Start Quiz</button>
+    </div>
 
-  document.getElementById("resultText").innerText =
-    `You scored ${score} / ${quizAnswers.length}`;
+    <!-- QUIZ -->
+    <div id="quizSection" class="card">
+      <h2 id="qCount" style="font-size: 14px; color: #aaa; margin-bottom: 10px;">Question 1/20</h2>
+      <p id="questionText" style="font-size: 20px; font-weight: 800; margin-bottom: 20px;"></p>
+      <div id="optionsGrid" style="display: grid; gap: 10px;"></div>
+    </div>
 
-  document.getElementById("resultSection").hidden = false;
-}
+    <!-- VIDEOS -->
+    <div id="videoSection" class="card">
+      <h3>Related Videos</h3>
+      <div id="videoGrid" class="video-grid"></div>
+    </div>
 
-async function loadYouTube(topic) {
-  const res = await fetch(`/api/youtube?topic=${encodeURIComponent(topic)}`);
-  const data = await res.json();
+  </div>
 
-  document.getElementById("youtubeVideos").innerHTML =
-    data.videos.map(v => `
-      <iframe width="300" height="170"
-        src="https://www.youtube.com/embed/${v}"
-        allowfullscreen>
-      </iframe>
-    `).join("");
+  <script type="module">
+    const studyInput = document.getElementById('studyInput');
+    const teachBtn = document.getElementById('teachBtn');
+    const loader = document.getElementById('loader');
+    const aiSection = document.getElementById('aiSection');
+    const quizSection = document.getElementById('quizSection');
+    const videoSection = document.getElementById('videoSection');
 
-  document.getElementById("youtubeSection").hidden = false;
-}
-</script>
+    let currentQuiz = [];
+    let currentQIndex = 0;
 
+    // STEP 1: TEACH ME
+    teachBtn.onclick = async () => {
+      const text = studyInput.value.trim();
+      if (!text) return alert("Enter text first!");
+
+      loader.style.display = 'block';
+      [aiSection, quizSection, videoSection].forEach(s => s.style.display = 'none');
+
+      try {
+        const res = await fetch('/api/study', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        const data = await res.json();
+        
+        loader.style.display = 'none';
+        if (res.ok) {
+          document.getElementById('aiExplanation').textContent = data.explanation;
+          currentQuiz = data.quiz;
+          aiSection.style.display = 'block';
+          
+          // Fetch Videos in background
+          fetchVideos(text);
+        }
+      } catch (e) { loader.style.display = 'none'; alert("Error!"); }
+    };
+
+    // STEP 2: QUIZ
+    document.getElementById('startQuizBtn').onclick = () => {
+      aiSection.style.display = 'none';
+      quizSection.style.display = 'block';
+      currentQIndex = 0;
+      showQuestion();
+    };
+
+    function showQuestion() {
+      if (currentQIndex >= currentQuiz.length) {
+        quizSection.style.display = 'none';
+        videoSection.style.display = 'block';
+        return;
+      }
+      const q = currentQuiz[currentQIndex];
+      document.getElementById('qCount').textContent = `Question ${currentQIndex + 1}/20`;
+      document.getElementById('questionText').textContent = q.question;
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.style = "padding: 15px; border: 1px solid #ddd; border-radius: 15px; background: #f9f9f9; cursor: pointer; font-weight: 700;";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          currentQIndex++;
+          showQuestion();
+        };
+        grid.appendChild(btn);
+      });
+    }
+
+    // STEP 3: VIDEOS
+    async function fetchVideos(topic) {
+      try {
+        const res = await fetch('/api/youtube', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ topic })
+        });
+        const videos = await res.json();
+        const grid = document.getElementById('videoGrid');
+        grid.innerHTML = videos.map(v => `
+          <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="video-card">
+            <img src="${v.thumbnail}">
+            <div><h4>${v.title}</h4><p style="font-size: 12px; color: var(--accent-blue);">Watch Tutorial →</p></div>
+          </a>
+        `).join('');
+      } catch (e) { console.log("Video error"); }
+    }
+  </script>
 </body>
 </html>
