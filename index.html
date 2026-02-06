@@ -201,16 +201,21 @@
       const text = studyInput.value.trim();
       if (!text) return alert("Enter text first!");
 
+      console.log("Starting Teach Me for:", text);
       loader.style.display = 'block';
       [aiSection, quizSection, videoSection].forEach(s => s.style.display = 'none');
 
       try {
+        console.log("Fetching /api/study...");
         const res = await fetch('/api/study', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text })
         });
+        
+        console.log("Response status:", res.status);
         const data = await res.json();
+        console.log("Response data:", data);
         
         loader.style.display = 'none';
         if (res.ok) {
@@ -220,8 +225,14 @@
           
           // Fetch Videos in background
           fetchVideos(text);
+        } else {
+          alert("AI Error: " + (data.error || "Something went wrong"));
         }
-      } catch (e) { loader.style.display = 'none'; alert("Error!"); }
+      } catch (e) { 
+        console.error("Fetch error:", e);
+        loader.style.display = 'none'; 
+        alert("Connection Error: Could not reach the AI Buddy. Please check your internet or Vercel logs."); 
+      }
     };
 
     // STEP 2: QUIZ
@@ -257,6 +268,7 @@
 
     // STEP 3: VIDEOS
     async function fetchVideos(topic) {
+      console.log("Fetching videos for:", topic);
       try {
         const res = await fetch('/api/youtube', {
           method: 'POST',
@@ -264,6 +276,7 @@
           body: JSON.stringify({ topic })
         });
         const videos = await res.json();
+        console.log("Videos data:", videos);
         const grid = document.getElementById('videoGrid');
         grid.innerHTML = videos.map(v => `
           <a href="https://www.youtube.com/watch?v=${v.videoId}" target="_blank" class="video-card">
@@ -271,8 +284,8 @@
             <div><h4>${v.title}</h4><p style="font-size: 12px; color: var(--accent-blue);">Watch Tutorial →</p></div>
           </a>
         `).join('');
-      } catch (e) { console.log("Video error"); }
+      } catch (e) { console.error("Video error:", e); }
     }
   </script>
-</body>
+</html>
 </html>
